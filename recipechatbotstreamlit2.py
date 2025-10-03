@@ -16,7 +16,7 @@ def getkey(): #to run on streamilt and get secrets info
     pwd=st.secrets["emailpwd"]
     return(key,email,pwd)
     
-def getkeylocal(): #for local execution
+def getkeylocal(): #for local machine execution in initial testing
     f=open('appkeys.txt','r')
     key=f.readline()
     email=f.readline()
@@ -114,4 +114,5 @@ if __name__ == '__main__':
         providerecipe(reciperequest, email, pwd)
 
     
+
 
