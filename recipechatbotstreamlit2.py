@@ -24,15 +24,14 @@ def getkeylocal(): #for local execution
     return(key,email, emailpwd)
    
 
-def sendmail(filename, rq, email, emailpwd): #sends an email using yagmail with a passed file as a file attachment and the original recipe request to use in the body
+def sendmail(rq, email, emailpwd): #sends an email using yagmail with a passed file as a file attachment and the original recipe request to use in the body
     import yagmail #https://pypi.org/project/yagmail/  #https://github.com/kootenpv/yagmail?tab=readme-ov-file#attaching-files
     dest=input("Enter your destination email: ")
     try:
       receiver = dest
-      body = "Your requested recipe file: " + rq
+      body = rq
       yag = yagmail.SMTP(email, emailpwd)
-      with open(filename, 'r') as f:
-        yag.send(to=receiver, subject="Your requested recipe file from ChatGPT", contents=body, attachments=f)
+      yag.send(to=receiver, subject="Your requested recipe file from ChatGPT", contents=body)
 
     except Exception as E:
       print(E)
@@ -42,7 +41,7 @@ def sendmail(filename, rq, email, emailpwd): #sends an email using yagmail with 
       return(True)
 
 
-def providerecipe(recipequestion):
+def providerecipe(recipequestion,email,pwd):
     
        recipes=0
        system_prompt='You are an experienced cook.  Provide me with your best suggestion for the requested recipe based on your experience and knowledge.'
@@ -69,23 +68,8 @@ def providerecipe(recipequestion):
             responses.append(botresponse.choices[i].message.content)
             questions.append(recipequestion)
             print("\n" + '*' * 50 + "\n")
-            if os.path.exists('recipes'):
-              os.chdir('recipes')
-            else:
-              os.mkdir('recipes')
-              os.chdir('recipes')
-            dir=os.getcwd()
-            print(dir)
-            filename=st.text_input("Enter filename: ")
-            f=open(filename,"w")
-            for i in range(0,recipes):
-                f.write(responses[i])
-                f.write("\n")
-                f.write('*'*50)
-                f.write("\n")
-            f.close()
-            print(filename)
-            status=sendmail(filename, recipequestion)
+           
+            status=sendmail(recipequestion, email, pwd)
             if status == True:
               print("Email with recipe sent successfully!")
 
@@ -127,6 +111,7 @@ if __name__ == '__main__':
       reciperequest = st.chat_input("Ask me for a recipe. ")
       if reciperequest:
         addrecipe(reciperequest)
-        providerecipe(reciperequest)
+        providerecipe(reciperequest, email, pwd)
 
     
+
