@@ -110,8 +110,8 @@ def addrecipe(request):
 
 
 if __name__ == '__main__':
-    #key,email, pwd=getkey()
-    key,email,emailpwd=getkeylocal() #to run on local machine
+    key,email, pwd=getkey()
+    #key,email,emailpwd=getkeylocal() #to run on local machine
     os.environ["OPENAI_API_KEY"]=key
     os.getenv('OPENAI_API_KEY')
     client=OpenAI() #can also pass key to client if enviro vbl not set
@@ -128,4 +128,5 @@ if __name__ == '__main__':
       if reciperequest:
         addrecipe(reciperequest)
         providerecipe(reciperequest)
+
     
